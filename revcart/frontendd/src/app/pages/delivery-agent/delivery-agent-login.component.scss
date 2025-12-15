@@ -1,0 +1,23 @@
+.card {
+  border: none;
+  border-radius: 10px;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: none;
+  font-weight: 500;
+
+  &:hover {
+    background-color: #218838;
+  }
+}
+
+a {
+  color: #28a745;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

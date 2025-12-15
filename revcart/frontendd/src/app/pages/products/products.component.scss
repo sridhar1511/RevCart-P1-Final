@@ -1,0 +1,44 @@
+.filters-card {
+  position: sticky;
+  top: 20px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.search-box {
+  width: 300px;
+}
+
+.form-range {
+  margin-bottom: 0.5rem;
+}
+
+.form-select, .form-control {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.form-select:focus, .form-control:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+h2 {
+  font-weight: 700;
+  color: #333;
+}
+
+.text-muted {
+  font-weight: 400;
+}
+
+.btn-outline-secondary {
+  border-color: #ddd;
+  color: #666;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #ddd;
+  color: #666;
+}

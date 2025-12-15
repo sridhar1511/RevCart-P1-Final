@@ -1,0 +1,100 @@
+<div class="container-fluid mt-4">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2>Delivery Dashboard</h2>
+      <p class="text-muted">Agent: {{agent?.name}} | Status: <span class="badge bg-info">{{agent?.status}}</span></p>
+    </div>
+    <div class="col-md-4 text-end">
+      <div class="btn-group">
+        <button class="btn btn-sm" [class.btn-success]="agent?.status === 'AVAILABLE'" 
+                (click)="updateAgentStatus('AVAILABLE')">Available</button>
+        <button class="btn btn-sm" [class.btn-warning]="agent?.status === 'BUSY'" 
+                (click)="updateAgentStatus('BUSY')">Busy</button>
+        <button class="btn btn-sm" [class.btn-secondary]="agent?.status === 'OFFLINE'" 
+                (click)="updateAgentStatus('OFFLINE')">Offline</button>
+      </div>
+      <button class="btn btn-danger btn-sm ms-2" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <label class="form-label">Filter by Status</label>
+          <select class="form-select" [(ngModel)]="statusFilter" (change)="filterOrders()">
+            <option value="">All Orders</option>
+            <option value="CONFIRMED">Confirmed</option>
+            <option value="PLACED">Placed</option>
+            <option value="PROCESSING">Processing</option>
+            <option value="SHIPPED">Out for Delivery</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && filteredOrders.length === 0" class="alert alert-info">
+    No orders to deliver
+  </div>
+
+  <div *ngFor="let order of filteredOrders" class="card mb-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h6>Order #{{order.id}}</h6>
+          <p class="mb-1"><strong>Customer:</strong> {{order.customerName || order.user?.name || 'N/A'}}</p>
+          <p class="mb-1"><strong>Phone:</strong> {{order.phoneNumber}}</p>
+          <p class="mb-1"><strong>Address:</strong> {{order.deliveryAddress}}</p>
+          <p class="mb-1"><strong>Amount:</strong> ₹{{order.totalAmount}}</p>
+        </div>
+        <div class="col-md-6">
+          <p class="mb-2">
+            <strong>Status:</strong> 
+            <span class="badge" [class]="'bg-' + getStatusColor(order.status)">{{order.status}}</span>
+          </p>
+          <div class="btn-group-vertical d-grid gap-2" role="group">
+            <button class="btn btn-sm position-relative" 
+                    [class.btn-gradient-primary]="(order.status === 'CONFIRMED' || order.status === 'PLACED') && isAgentAvailable()"
+                    [class.btn-outline-secondary]="(order.status !== 'CONFIRMED' && order.status !== 'PLACED') || !isAgentAvailable()"
+                    (click)="updateOrderStatus(order.id, 'PROCESSING')"
+                    [disabled]="(order.status !== 'CONFIRMED' && order.status !== 'PLACED') || !isAgentAvailable()"
+                    [title]="!isAgentAvailable() ? 'Agent must be AVAILABLE to process orders' : ''">
+              <i class="bi bi-play-circle me-2"></i>
+              <span>Start Processing</span>
+              <span *ngIf="order.status === 'CONFIRMED' || order.status === 'PLACED'" class="badge bg-light text-dark ms-2">Ready</span>
+            </button>
+            
+            <button class="btn btn-sm position-relative" 
+                    [class.btn-gradient-warning]="order.status === 'PROCESSING' && isAgentAvailable()"
+                    [class.btn-outline-secondary]="order.status !== 'PROCESSING' || !isAgentAvailable()"
+                    (click)="updateOrderStatus(order.id, 'SHIPPED')"
+                    [disabled]="order.status !== 'PROCESSING' || !isAgentAvailable()"
+                    [title]="!isAgentAvailable() ? 'Agent must be AVAILABLE to ship orders' : ''">
+              <i class="bi bi-truck me-2"></i>
+              <span>Out for Delivery</span>
+              <span *ngIf="order.status === 'PROCESSING'" class="badge bg-light text-dark ms-2">In Progress</span>
+            </button>
+            
+            <button class="btn btn-sm position-relative" 
+                    [class.btn-gradient-success]="order.status === 'SHIPPED' && isAgentAvailable()"
+                    [class.btn-outline-secondary]="order.status !== 'SHIPPED' || !isAgentAvailable()"
+                    (click)="updateOrderStatus(order.id, 'DELIVERED')"
+                    [disabled]="order.status !== 'SHIPPED' || !isAgentAvailable()"
+                    [title]="!isAgentAvailable() ? 'Agent must be AVAILABLE to mark as delivered' : ''">
+              <i class="bi bi-check-circle me-2"></i>
+              <span>Mark Delivered</span>
+              <span *ngIf="order.status === 'SHIPPED'" class="badge bg-light text-dark ms-2">Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="dashboard-container">
+  <h1 class="dashboard-title">Admin Dashboard</h1>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon orders-icon">📦</div>
+      <div class="stat-content">
+        <h3 class="stat-label">Total Orders</h3>
+        <p class="stat-value">{{ totalOrders }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon revenue-icon">💰</div>
+      <div class="stat-content">
+        <h3 class="stat-label">Total Revenue</h3>
+        <p class="stat-value">₹{{ totalRevenue | number:'1.0-0' }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon users-icon">👥</div>
+      <div class="stat-content">
+        <h3 class="stat-label">Total Users</h3>
+        <p class="stat-value">{{ totalUsers }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon products-icon">🛍️</div>
+      <div class="stat-content">
+        <h3 class="stat-label">Total Products</h3>
+        <p class="stat-value">{{ totalProducts }}</p>
+      </div>
+    </div>
+  </div>
+</div>

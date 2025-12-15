@@ -1,0 +1,102 @@
+.dashboard-container {
+  padding: 2rem !important;
+  background: linear-gradient(135deg, #6B3F69 0%, #8D5F8C 50%, #A376A2 100%) !important;
+  min-height: 100vh !important;
+}
+
+.dashboard-title {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: #DDC3C3 !important;
+  margin-bottom: 2rem !important;
+}
+
+.loading-spinner {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  min-height: 400px !important;
+}
+
+.stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 2rem !important;
+  margin-bottom: 2rem !important;
+}
+
+.stat-card {
+  background: #DDC3C3 !important;
+  border-radius: 12px !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.5rem !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  border: none !important;
+
+  &:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+.stat-icon {
+  font-size: 2.5rem !important;
+  width: 60px !important;
+  height: 60px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 10px !important;
+  background: #A376A2 !important;
+  flex-shrink: 0 !important;
+}
+
+.stat-content {
+  flex: 1 !important;
+}
+
+.stat-label {
+  font-size: 0.9rem !important;
+  color: #6B3F69 !important;
+  margin: 0 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.stat-value {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  color: #6B3F69 !important;
+  margin: 0.5rem 0 0 0 !important;
+}
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat-card {
+    padding: 1rem !important;
+    gap: 1rem !important;
+  }
+
+  .stat-icon {
+    font-size: 2rem !important;
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .stat-value {
+    font-size: 1.5rem !important;
+  }
+}

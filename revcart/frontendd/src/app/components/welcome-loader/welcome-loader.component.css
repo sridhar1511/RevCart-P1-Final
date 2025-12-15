@@ -1,0 +1,315 @@
+.welcome-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, #1a237e 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, #00695c 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, #2e7d32 0%, transparent 50%),
+    linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  perspective: 1200px;
+  overflow: hidden;
+  animation: backgroundShift 6s ease-in-out infinite;
+}
+
+.welcome-container {
+  text-align: center;
+  color: white;
+  transform-style: preserve-3d;
+  animation: containerFloat 4s ease-in-out infinite;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+  transform-style: preserve-3d;
+  animation: logoEntrance 2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.logo {
+  font-size: 4.5rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.logo::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  background: linear-gradient(45deg, #00e676, #1de9b6, #00bcd4, #2196f3);
+  border-radius: 15px;
+  filter: blur(20px);
+  opacity: 0.4;
+  animation: haloRotate 3s linear infinite;
+  z-index: -1;
+}
+
+.logo-text {
+  background: linear-gradient(45deg, #00e676, #1de9b6, #00bcd4, #2196f3);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textWave 3s ease-in-out infinite;
+  font-family: 'Arial Black', sans-serif;
+  letter-spacing: -2px;
+  position: relative;
+  transform: translateZ(30px);
+  text-shadow: 0 0 30px rgba(0, 230, 118, 0.5);
+}
+
+.logo-text:first-child {
+  animation-delay: 0s;
+}
+
+.logo-text:last-child {
+  animation-delay: 0.5s;
+}
+
+.logo-cart {
+  font-size: 4rem;
+  animation: cartSpin 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  transform: translateZ(50px);
+  filter: 
+    drop-shadow(0 0 20px #00e676) 
+    drop-shadow(0 0 40px #1de9b6);
+  position: relative;
+}
+
+.logo-cart::after {
+  content: '✨';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.5rem;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.logo-tagline {
+  font-size: 1.2rem;
+  color: #1de9b6;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  animation: taglineGlow 2s ease-in-out infinite alternate;
+  transform: translateZ(20px);
+}
+
+.welcome-message {
+  margin-bottom: 2.5rem;
+  transform-style: preserve-3d;
+  animation: messageRise 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
+}
+
+.welcome-title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #ffffff, #1de9b6, #2196f3);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleShimmer 3s ease-in-out infinite;
+  font-weight: 800;
+  letter-spacing: 1px;
+  transform: translateZ(25px);
+  text-shadow: 0 0 50px rgba(29, 233, 182, 0.5);
+}
+
+.welcome-subtitle {
+  font-size: 1.2rem;
+  color: #b3e5fc;
+  font-weight: 300;
+  transform: translateZ(15px);
+  animation: subtitleFloat 4s ease-in-out infinite;
+}
+
+.loading-animation {
+  transform-style: preserve-3d;
+  animation: loadingEntrance 2s ease-out 1s both;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+  transform: translateZ(30px);
+}
+
+.spinner::before,
+.spinner::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  animation: spinnerOrbit 2s linear infinite;
+}
+
+.spinner::before {
+  width: 60px;
+  height: 60px;
+  border: 3px solid transparent;
+  border-top: 3px solid #00e676;
+  border-right: 3px solid #1de9b6;
+}
+
+.spinner::after {
+  width: 45px;
+  height: 45px;
+  top: 7.5px;
+  left: 7.5px;
+  border: 2px solid transparent;
+  border-bottom: 2px solid #2196f3;
+  border-left: 2px solid #00bcd4;
+  animation-direction: reverse;
+  animation-duration: 1.5s;
+}
+
+.loading-text {
+  font-size: 1.1rem;
+  color: #b3e5fc;
+  font-weight: 300;
+  animation: textPulse 2s ease-in-out infinite;
+  transform: translateZ(10px);
+}
+
+@keyframes backgroundShift {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(60deg); }
+}
+
+@keyframes containerFloat {
+  0%, 100% { transform: translateY(0) rotateX(0deg); }
+  50% { transform: translateY(-10px) rotateX(1deg); }
+}
+
+@keyframes logoEntrance {
+  0% {
+    transform: translateZ(-500px) rotateY(180deg) scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateZ(0) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes haloRotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes textWave {
+  0%, 100% {
+    background-position: 0% 50%;
+    transform: translateZ(30px) rotateY(0deg) scale(1);
+  }
+  25% {
+    background-position: 100% 50%;
+    transform: translateZ(35px) rotateY(3deg) scale(1.02);
+  }
+  50% {
+    background-position: 200% 50%;
+    transform: translateZ(40px) rotateY(0deg) scale(1.05);
+  }
+  75% {
+    background-position: 300% 50%;
+    transform: translateZ(35px) rotateY(-3deg) scale(1.02);
+  }
+}
+
+@keyframes cartSpin {
+  0% { transform: translateZ(50px) rotateY(0deg) rotateX(0deg); }
+  25% { transform: translateZ(60px) rotateY(90deg) rotateX(5deg); }
+  50% { transform: translateZ(70px) rotateY(180deg) rotateX(0deg); }
+  75% { transform: translateZ(60px) rotateY(270deg) rotateX(-5deg); }
+  100% { transform: translateZ(50px) rotateY(360deg) rotateX(0deg); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+
+@keyframes taglineGlow {
+  from { text-shadow: 0 0 15px #1de9b6; }
+  to { text-shadow: 0 0 30px #1de9b6, 0 0 45px #1de9b6; }
+}
+
+@keyframes messageRise {
+  0% {
+    transform: translateY(50px) translateZ(-100px) rotateX(25deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) translateZ(0) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes titleShimmer {
+  0% {
+    background-position: -200% 0;
+    transform: translateZ(25px) scale(1);
+  }
+  50% {
+    background-position: 200% 0;
+    transform: translateZ(30px) scale(1.01);
+  }
+  100% {
+    background-position: -200% 0;
+    transform: translateZ(25px) scale(1);
+  }
+}
+
+@keyframes subtitleFloat {
+  0%, 100% { transform: translateZ(15px) translateY(0); }
+  50% { transform: translateZ(20px) translateY(-5px); }
+}
+
+@keyframes loadingEntrance {
+  0% {
+    transform: translateY(30px) translateZ(-50px) rotateX(45deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) translateZ(0) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes spinnerOrbit {
+  0% { transform: rotate(0deg) translateZ(0); }
+  100% { transform: rotate(360deg) translateZ(5px); }
+}
+
+@keyframes textPulse {
+  0%, 100% { opacity: 0.7; transform: translateZ(10px); }
+  50% { opacity: 1; transform: translateZ(15px); }
+}
+
+@media (max-width: 768px) {
+  .logo { font-size: 3rem; }
+  .logo-cart { font-size: 2.5rem; }
+  .welcome-title { font-size: 2rem; }
+  .welcome-subtitle { font-size: 1rem; }
+  .logo-tagline { font-size: 0.9rem; letter-spacing: 2px; }
+  .welcome-container { max-width: 95vw; }
+}

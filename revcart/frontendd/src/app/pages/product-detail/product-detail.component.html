@@ -1,0 +1,78 @@
+<div class="container my-4" *ngIf="product">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/home">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/products">Products</a></li>
+      <li class="breadcrumb-item active">{{product.name}}</li>
+    </ol>
+  </nav>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="product-image-container">
+        <img [src]="product.image" class="img-fluid rounded product-image" [alt]="product.name">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="product-details">
+        <h1>{{product.name}}</h1>
+        <p class="text-muted category">{{product.category | titlecase}}</p>
+        <div class="price-section">
+          <h3 class="text-success price">₹{{product.price}} 
+            <small class="text-muted unit">per {{product.unit}}</small>
+          </h3>
+        </div>
+        
+        <div class="my-4">
+          <h5>Description</h5>
+          <p class="description">{{product.description}}</p>
+        </div>
+        
+        <div class="my-4">
+          <h5>Product Details</h5>
+          <ul class="list-unstyled product-info">
+            <li><strong>Category:</strong> {{product.category | titlecase}}</li>
+            <li><strong>Unit:</strong> {{product.unit}}</li>
+            <li><strong>Stock:</strong> <span class="text-success">In Stock</span></li>
+            <li><strong>Freshness:</strong> <span class="text-success">Farm Fresh</span></li>
+          </ul>
+        </div>
+        
+        <div class="size-section mb-4" *ngIf="availableSizes.length > 0">
+          <label class="form-label">Size:</label>
+          <div class="size-options">
+            <button *ngFor="let size of availableSizes" 
+              class="btn size-btn" 
+              [ngClass]="{'btn-success': selectedSize === size, 'btn-outline-secondary': selectedSize !== size}"
+              (click)="selectedSize = size">
+              {{size}}
+            </button>
+          </div>
+        </div>
+        
+        <div class="quantity-section mb-4">
+          <label class="form-label">Quantity:</label>
+          <div class="input-group quantity-input">
+            <button class="btn btn-outline-secondary" (click)="decreaseQuantity()">-</button>
+            <input type="text" class="form-control text-center" [value]="quantity" readonly>
+            <button class="btn btn-outline-secondary" (click)="increaseQuantity()">+</button>
+          </div>
+        </div>
+        
+        <div class="action-buttons d-flex gap-2">
+          <button class="btn btn-success btn-lg flex-fill" (click)="addToCart()">
+            <i class="bi bi-cart-plus"></i> Add to Cart
+          </button>
+          <button class="btn btn-lg" 
+                  [ngClass]="wishlistService.isInWishlist(product.id) ? 'btn-danger' : 'btn-outline-danger'"
+                  (click)="toggleWishlist()"
+                  [title]="wishlistService.isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'">
+            <i class="bi" [ngClass]="wishlistService.isInWishlist(product.id) ? 'bi-heart-fill' : 'bi-heart'"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</div>

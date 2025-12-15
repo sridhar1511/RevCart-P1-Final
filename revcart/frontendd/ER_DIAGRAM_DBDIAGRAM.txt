@@ -1,0 +1,184 @@
+// RevCart MongoDB ER Diagram - DBDiagram.io Format
+// Copy and paste this content into https://dbdiagram.io/
+
+Table users {
+  _id ObjectId [primary key]
+  name String [not null]
+  email String [unique, not null]
+  password String [not null]
+  phone String
+  address String
+  firstName String
+  lastName String
+  profilePicture String
+  role Enum [note: "USER, ADMIN"]
+  createdAt DateTime [default: "now()"]
+  otp String
+  otpExpiry DateTime
+  isVerified Boolean [default: false]
+  resetToken String
+  resetTokenExpiry DateTime
+}
+
+Table products {
+  _id ObjectId [primary key]
+  name String [not null]
+  category String [not null]
+  price Decimal [not null]
+  unit String [not null]
+  image String
+  description String
+  stockQuantity Integer [default: 100]
+  createdAt DateTime [default: "now()"]
+}
+
+Table carts {
+  _id ObjectId [primary key]
+  userId ObjectId [ref: > users._id, not null]
+  cartItems CartItem[] [note: "Array of cart items"]
+  createdAt DateTime [default: "now()"]
+  updatedAt DateTime
+}
+
+Table cartItems {
+  _id ObjectId [primary key]
+  productId ObjectId [ref: > products._id, not null]
+  quantity Integer [not null]
+  price Decimal [not null]
+}
+
+Table orders {
+  _id ObjectId [primary key]
+  userId ObjectId [ref: > users._id, not null]
+  orderItems OrderItem[] [note: "Array of order items"]
+  totalAmount Decimal [not null]
+  status String [note: "PENDING, CONFIRMED, PROCESSING, SHIPPED, DELIVERED, CANCELLED"]
+  deliveryAddress String [not null]
+  phoneNumber String [not null]
+  paymentMethod String [note: "CREDIT_CARD, DEBIT_CARD, UPI, WALLET"]
+  paymentStatus String [note: "PENDING, COMPLETED, FAILED"]
+  createdAt DateTime [default: "now()"]
+  updatedAt DateTime
+}
+
+Table orderItems {
+  _id ObjectId [primary key]
+  productId ObjectId [ref: > products._id, not null]
+  quantity Integer [not null]
+  price Decimal [not null]
+  productName String
+}
+
+Table addresses {
+  _id ObjectId [primary key]
+  userId ObjectId [ref: > users._id, not null]
+  name String [not null]
+  addressLine String [not null]
+  city String [not null]
+  state String [not null]
+  pincode String [not null]
+  phone String [not null]
+  isDefault Boolean [default: false]
+  createdAt DateTime [default: "now()"]
+}
+
+Table payments {
+  _id ObjectId [primary key]
+  orderId ObjectId [ref: > orders._id, not null]
+  userId ObjectId [ref: > users._id, not null]
+  amount Decimal [not null]
+  method String [note: "CREDIT_CARD, DEBIT_CARD, UPI, WALLET"]
+  status String [note: "PENDING, COMPLETED, FAILED"]
+  transactionId String
+  createdAt DateTime [default: "now()"]
+}
+
+Table deliveries {
+  _id ObjectId [primary key]
+  orderId ObjectId [ref: > orders._id, not null]
+  agentId ObjectId [ref: > deliveryAgents._id]
+  status String [note: "ASSIGNED, PICKED_UP, IN_TRANSIT, DELIVERED"]
+  latitude Double
+  longitude Double
+  estimatedDeliveryTime DateTime
+  actualDeliveryTime DateTime
+  createdAt DateTime [default: "now()"]
+  updatedAt DateTime
+}
+
+Table deliveryAgents {
+  _id ObjectId [primary key]
+  name String [not null]
+  email String [unique, not null]
+  password String [not null]
+  phone String [not null]
+  status String [note: "ACTIVE, INACTIVE, ON_DELIVERY"]
+  currentLocation Location [note: "GeoJSON Point"]
+  totalDeliveries Integer [default: 0]
+  rating Double [default: 0]
+  createdAt DateTime [default: "now()"]
+}
+
+Table wishlists {
+  _id ObjectId [primary key]
+  userId ObjectId [ref: > users._id, not null]
+  products ObjectId[] [ref: > products._id, note: "Array of product IDs"]
+  createdAt DateTime [default: "now()"]
+  updatedAt DateTime
+}
+
+Table reviews {
+  _id ObjectId [primary key]
+  productId ObjectId [ref: > products._id, not null]
+  userId ObjectId [ref: > users._id, not null]
+  rating Integer [note: "1-5"]
+  comment String
+  createdAt DateTime [default: "now()"]
+}
+
+Table coupons {
+  _id ObjectId [primary key]
+  code String [unique, not null]
+  discountType String [note: "PERCENTAGE, FIXED"]
+  discountValue Decimal [not null]
+  minOrderAmount Decimal
+  maxUsageCount Integer
+  usageCount Integer [default: 0]
+  expiryDate DateTime
+  isActive Boolean [default: true]
+  createdAt DateTime [default: "now()"]
+}
+
+Table notifications {
+  _id ObjectId [primary key]
+  userId ObjectId [ref: > users._id, not null]
+  title String [not null]
+  message String [not null]
+  type String [note: "ORDER, DELIVERY, PROMOTION"]
+  isRead Boolean [default: false]
+  createdAt DateTime [default: "now()"]
+}
+
+Table analytics {
+  _id ObjectId [primary key]
+  date DateTime [not null]
+  totalOrders Integer
+  totalRevenue Decimal
+  totalUsers Integer
+  newUsers Integer
+  topProducts ObjectId[] [ref: > products._id]
+  createdAt DateTime [default: "now()"]
+}
+
+// Relationships
+Ref: carts.userId > users._id
+Ref: orders.userId > users._id
+Ref: addresses.userId > users._id
+Ref: payments.userId > users._id
+Ref: payments.orderId > orders._id
+Ref: deliveries.orderId > orders._id
+Ref: deliveries.agentId > deliveryAgents._id
+Ref: wishlists.userId > users._id
+Ref: reviews.userId > users._id
+Ref: reviews.productId > products._id
+Ref: notifications.userId > users._id

@@ -1,0 +1,74 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow login-card">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <h3>Login to RevCart</h3>
+            <p class="text-muted">Welcome back! Please sign in to your account</p>
+          </div>
+          
+          <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                [(ngModel)]="loginData.email" 
+                name="email"
+                required
+                #email="ngModel"
+                [class.is-invalid]="email.invalid && email.touched">
+              <div *ngIf="email.invalid && email.touched" class="invalid-feedback">
+                Email is required
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <div class="input-group">
+                <input 
+                  [type]="showPassword ? 'text' : 'password'" 
+                  class="form-control" 
+                  [(ngModel)]="loginData.password" 
+                  name="password"
+                  required
+                  #password="ngModel"
+                  [class.is-invalid]="password.invalid && password.touched">
+                <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()">
+                  <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+                </button>
+              </div>
+              <div *ngIf="password.invalid && password.touched" class="invalid-feedback">
+                Password is required
+              </div>
+            </div>
+            
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" [(ngModel)]="rememberMe" name="rememberMe">
+              <label class="form-check-label">Remember me</label>
+            </div>
+            
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success" [disabled]="loginForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                {{isLoading ? 'Signing in...' : 'Login'}}
+              </button>
+            </div>
+          </form>
+
+
+          
+          <div class="text-center mt-3">
+            <p>Don't have an account? <a routerLink="/register" class="text-success">Register here</a></p>
+            <a routerLink="/forgot-password" class="text-muted">Forgot Password?</a>
+          </div>
+
+          <div class="text-center mt-3 pt-3 border-top">
+            <p class="text-muted small">Delivery Agent? <a routerLink="/delivery-agent/login" class="text-success">Login here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

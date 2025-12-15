@@ -1,0 +1,218 @@
+<div class="container my-4">
+  <h2>Checkout</h2>
+  
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4 address-card">
+        <div class="card-header">
+          <h5 class="mb-0">Delivery Address</h5>
+        </div>
+        <div class="card-body">
+          <!-- Saved Addresses -->
+          <div *ngIf="savedAddresses.length > 0" class="saved-addresses mb-4">
+            <h6>Saved Addresses</h6>
+            <div class="row">
+              <div *ngFor="let addr of savedAddresses" class="col-md-6 mb-3">
+                <div class="card address-option" [class.selected]="selectedAddressId === addr.id" (click)="selectAddress(addr.id!)">
+                  <div class="card-body p-3">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" [checked]="selectedAddressId === addr.id" readonly>
+                      <label class="form-check-label">
+                        <strong>{{addr.fullName}}</strong>
+                        <small class="text-muted d-block">{{addr.phone}}</small>
+                        <small class="text-muted d-block">{{addr.line1}}, {{addr.city}}, {{addr.state}} {{addr.pincode}}</small>
+                        <span *ngIf="addr.isDefault" class="badge bg-primary mt-1">Default</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" (click)="useNewAddress()">
+              <i class="bi bi-plus"></i> Add New Address
+            </button>
+            <hr>
+          </div>
+          
+          <!-- Address Form -->
+          <div *ngIf="savedAddresses.length === 0 || showAddressForm">
+            <form #addressForm="ngForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" [(ngModel)]="address.fullName" name="fullName" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-control" [(ngModel)]="address.phone" name="phone" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Address Line 1</label>
+              <input type="text" class="form-control" [(ngModel)]="address.line1" name="line1" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Address Line 2 (Optional)</label>
+              <input type="text" class="form-control" [(ngModel)]="address.line2" name="line2">
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label class="form-label">City</label>
+                <input type="text" class="form-control" [(ngModel)]="address.city" name="city" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">State</label>
+                <input type="text" class="form-control" [(ngModel)]="address.state" name="state" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">PIN Code</label>
+                <input type="text" class="form-control" [(ngModel)]="address.pincode" name="pincode" required>
+              </div>
+            </div>
+            
+            <!-- Save Address Option -->
+            <div *ngIf="showAddressForm || savedAddresses.length === 0" class="form-check mt-3">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="saveThisAddress" name="saveAddress">
+              <label class="form-check-label">
+                Save this address for future orders
+              </label>
+            </div>
+          </form>
+          </div>
+      </div>
+      
+      <div class="card payment-card">
+        <div class="card-header">
+          <h5 class="mb-0">Payment Method</h5>
+        </div>
+        <div class="card-body">
+          <div class="payment-options">
+            <div class="form-check mb-3 payment-option">
+              <input class="form-check-input" type="radio" name="paymentMethod" value="cod" [(ngModel)]="paymentMethod">
+              <label class="form-check-label">
+                <i class="bi bi-cash-coin me-2"></i>
+                Cash on Delivery
+                <small class="text-muted d-block">Pay when your order arrives</small>
+              </label>
+            </div>
+            <div class="form-check mb-3 payment-option">
+              <input class="form-check-input" type="radio" name="paymentMethod" value="upi" [(ngModel)]="paymentMethod">
+              <label class="form-check-label">
+                <i class="bi bi-phone me-2"></i>
+                UPI Payment
+                <small class="text-muted d-block">Pay using UPI apps</small>
+              </label>
+            </div>
+            <div class="form-check mb-3 payment-option">
+              <input class="form-check-input" type="radio" name="paymentMethod" value="card" [(ngModel)]="paymentMethod">
+              <label class="form-check-label">
+                <i class="bi bi-credit-card me-2"></i>
+                Credit/Debit Card
+                <small class="text-muted d-block">Visa, Mastercard, RuPay</small>
+              </label>
+            </div>
+          </div>
+          
+          <div *ngIf="paymentMethod === 'upi'" class="upi-details mt-4">
+            <div class="mb-3">
+              <label class="form-label">UPI ID</label>
+              <input type="text" class="form-control" placeholder="yourname@upi" [(ngModel)]="upiId" name="upiId">
+              <small class="text-muted d-block mt-1">Example: yourname&#64;paytm, yourname&#64;googlepay, yourname&#64;phonepe</small>
+            </div>
+          </div>
+          
+          <div *ngIf="paymentMethod === 'card'" class="card-details mt-4">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Card Number</label>
+                <input type="text" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Cardholder Name</label>
+                <input type="text" class="form-control" placeholder="John Doe">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Expiry Date</label>
+                <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">CVV</label>
+                <input type="text" class="form-control" placeholder="123" maxlength="3">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card order-summary">
+        <div class="card-header">
+          <h5 class="mb-0">Order Summary</h5>
+        </div>
+        <div class="card-body">
+          <div class="order-items">
+            <div *ngFor="let item of orderItems" class="d-flex justify-content-between align-items-center mb-2 order-item">
+              <div class="item-info">
+                <span class="item-name">{{item.name}}</span>
+                <small class="text-muted d-block">Qty: {{item.quantity}}</small>
+              </div>
+              <span class="item-total">₹{{item.price * item.quantity}}</span>
+            </div>
+          </div>
+          
+          <div class="coupon-section mb-3">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Try: SAVE10, WELCOME20, BIGDEAL" [(ngModel)]="couponCode" [disabled]="couponApplied">
+              <button class="btn btn-outline-secondary" type="button" (click)="applyCoupon()" *ngIf="!couponApplied" [disabled]="!couponCode.trim()">Apply</button>
+              <button class="btn btn-outline-danger" type="button" (click)="removeCoupon()" *ngIf="couponApplied">Remove</button>
+            </div>
+            <small *ngIf="couponMessage" [ngClass]="{'text-success': couponApplied, 'text-danger': !couponApplied}" class="d-block mt-1">{{couponMessage}}</small>
+          </div>
+          
+          <hr>
+          
+          <div class="summary-row d-flex justify-content-between mb-2">
+            <span>Subtotal:</span>
+            <span>₹{{subtotal}}</span>
+          </div>
+          <div class="summary-row d-flex justify-content-between mb-2">
+            <span>Delivery:</span>
+            <span>₹{{deliveryFee}}</span>
+          </div>
+          <div class="summary-row d-flex justify-content-between mb-2">
+            <span>Tax:</span>
+            <span>₹{{tax}}</span>
+          </div>
+          <div *ngIf="couponDiscount > 0" class="summary-row d-flex justify-content-between mb-2 text-success">
+            <span>Coupon Discount:</span>
+            <span>-₹{{couponDiscount}}</span>
+          </div>
+          
+          <hr>
+          
+          <div class="d-flex justify-content-between fw-bold fs-5 total-row">
+            <span>Total:</span>
+            <span class="text-success">₹{{total}}</span>
+          </div>
+          
+          <div class="d-grid mt-4">
+            <button class="btn btn-success btn-lg" (click)="placeOrder()" [disabled]="isProcessing || !paymentMethod">
+              <span *ngIf="isProcessing" class="spinner-border spinner-border-sm me-2"></span>
+              {{isProcessing ? 'Processing...' : 'Place Order'}}
+            </button>
+          </div>
+          
+          <div class="text-center mt-3">
+            <small class="text-muted">
+              <i class="bi bi-shield-check me-1"></i>
+              Your payment information is secure
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

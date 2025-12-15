@@ -1,0 +1,38 @@
+.admin-product-form {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 20px 0;
+
+  .card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+  }
+
+  .form-label {
+    font-weight: 500;
+    color: #333;
+  }
+
+  .form-control, .form-select {
+    border-color: #ddd;
+    
+    &:focus {
+      border-color: #A1BC98;
+      box-shadow: 0 0 0 0.2rem rgba(161, 188, 152, 0.25);
+    }
+  }
+
+  .btn-primary {
+    background-color: #A1BC98;
+    border-color: #A1BC98;
+
+    &:hover {
+      background-color: #8fa87f;
+      border-color: #8fa87f;
+    }
+  }
+
+  .alert {
+    border-radius: 4px;
+  }
+}

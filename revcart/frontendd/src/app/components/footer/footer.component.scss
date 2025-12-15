@@ -1,0 +1,30 @@
+footer {
+  margin-top: auto;
+}
+
+.social-links a {
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #28a745 !important;
+}
+
+.list-unstyled li {
+  margin-bottom: 0.5rem;
+}
+
+.list-unstyled a {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.list-unstyled a:hover {
+  color: #28a745 !important;
+}
+
+h5, h6 {
+  color: #28a745;
+  margin-bottom: 1rem;
+}

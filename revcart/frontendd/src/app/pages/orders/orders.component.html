@@ -1,0 +1,117 @@
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Users Orders</h2>
+    <div class="d-flex gap-2 align-items-center">
+      <button class="btn btn-outline-primary btn-sm" (click)="refreshOrders()">
+        <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+      </button>
+      <select class="form-select" [(ngModel)]="statusFilter" (change)="filterOrders()">
+        <option value="">All Orders</option>
+        <option value="DELIVERED">Delivered</option>
+        <option value="SHIPPED">Out for Delivery</option>
+        <option value="PROCESSING">Processing</option>
+        <option value="CANCELLED">Cancelled</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-12">
+      <div *ngFor="let order of filteredOrders" class="card mb-3 order-card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div class="order-header-info">
+            <h6 class="mb-0 order-id">Order #{{order.id}}</h6>
+            <small class="text-muted">
+              <i class="bi bi-calendar me-1"></i>Placed on {{order.date}}
+            </small>
+          </div>
+          <span class="badge order-status" [class]="'bg-' + getStatusColor(order.status)">
+            {{order.status}}
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="order-items">
+                <div *ngFor="let item of order.items" class="d-flex align-items-center mb-2 order-item">
+                  <img [src]="item.image" class="me-3 rounded item-image" [alt]="item.name">
+                  <div class="item-details">
+                    <h6 class="mb-0 item-name">{{item.name}}</h6>
+                    <small class="text-muted">Qty: {{item.quantity}} • ₹{{item.price}} each</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 text-end">
+              <div class="order-total">
+                <h5 class="text-success mb-3">₹{{order.total}}</h5>
+                <div class="order-actions">
+                  <button class="btn btn-sm btn-outline-success mb-1 action-btn">
+                    <i class="bi bi-truck me-1"></i>Track Order
+                  </button>
+                  <button class="btn btn-sm btn-outline-primary mb-1 action-btn">
+                    <i class="bi bi-file-earmark-text me-1"></i>View Invoice
+                  </button>
+                  <button *ngIf="order.status === 'DELIVERED'" class="btn btn-sm btn-outline-warning mb-1 action-btn">
+                    <i class="bi bi-star me-1"></i>Rate & Review
+                  </button>
+                  <button *ngIf="canCancel(order.status)" (click)="cancelOrder(order.id)" class="btn btn-sm btn-outline-danger mb-1 action-btn">
+                    <i class="bi bi-x-circle me-1"></i>Cancel Order
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Order Timeline -->
+          <div class="mt-4 order-timeline">
+            <h6 class="timeline-title">Order Status</h6>
+            <div class="timeline-container">
+              <div class="timeline-step" [class.completed]="true">
+                <div class="timeline-icon">
+                  <i class="bi bi-check"></i>
+                </div>
+                <div class="timeline-label">Placed</div>
+              </div>
+              <div class="timeline-connector" [class.active]="order.timeline.confirmed"></div>
+              <div class="timeline-step" [class.completed]="order.timeline.confirmed">
+                <div class="timeline-icon">
+                  <i class="bi bi-check"></i>
+                </div>
+                <div class="timeline-label">Confirmed</div>
+              </div>
+              <div class="timeline-connector" [class.active]="order.timeline.packed"></div>
+              <div class="timeline-step" [class.completed]="order.timeline.packed">
+                <div class="timeline-icon">
+                  <i class="bi bi-box"></i>
+                </div>
+                <div class="timeline-label">Packed</div>
+              </div>
+              <div class="timeline-connector" [class.active]="order.timeline.shipped"></div>
+              <div class="timeline-step" [class.completed]="order.timeline.shipped">
+                <div class="timeline-icon">
+                  <i class="bi bi-truck"></i>
+                </div>
+                <div class="timeline-label">Out for Delivery</div>
+              </div>
+              <div class="timeline-connector" [class.active]="order.timeline.delivered"></div>
+              <div class="timeline-step" [class.completed]="order.timeline.delivered">
+                <div class="timeline-icon">
+                  <i class="bi bi-house"></i>
+                </div>
+                <div class="timeline-label">Delivered</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="filteredOrders.length === 0" class="text-center py-5 no-orders">
+        <i class="bi bi-bag-x fa-4x text-muted mb-3"></i>
+        <h4>No orders found</h4>
+        <p class="text-muted">You haven't placed any orders yet</p>
+        <a routerLink="/products" class="btn btn-success">Start Shopping</a>
+      </div>
+    </div>
+  </div>
+</div>

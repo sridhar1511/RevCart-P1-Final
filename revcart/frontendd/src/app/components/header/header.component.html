@@ -1,0 +1,76 @@
+<header class="modern-header">
+  <div class="header-container">
+    <!-- Logo -->
+    <div class="logo-section">
+      <a routerLink="/home" class="logo">
+        <i class="bi bi-cart3"></i>
+        <span>RevCart</span>
+      </a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-menu">
+      <a routerLink="/home" routerLinkActive="active" class="nav-item">Home</a>
+      <a routerLink="/products" routerLinkActive="active" class="nav-item">Products</a>
+      <a routerLink="/coupons" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-ticket-perforated"></i>
+        Coupons
+      </a>
+    </nav>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" placeholder="Search products..." [(ngModel)]="searchTerm" class="search-input">
+      <i class="bi bi-search search-icon-right"></i>
+    </div>
+
+    <!-- Right Section -->
+    <div class="right-section">
+      <!-- Cart -->
+      <a routerLink="/cart" *ngIf="isLoggedIn" class="icon-btn cart-btn">
+        <i class="bi bi-bag"></i>
+        <span class="badge" *ngIf="cartCount > 0">{{cartCount}}</span>
+      </a>
+
+      <!-- Wishlist -->
+      <a routerLink="/wishlist" *ngIf="isLoggedIn" class="icon-btn wishlist-btn">
+        <i class="bi bi-heart"></i>
+        <span class="badge" *ngIf="wishlistCount > 0">{{wishlistCount}}</span>
+      </a>
+
+      <!-- Auth Links -->
+      <a routerLink="/delivery-agent/login" *ngIf="!isLoggedIn && !isDeliveryAgent()" class="auth-link">Delivery</a>
+      <a routerLink="/login" *ngIf="!isLoggedIn" class="auth-link">Login</a>
+      <a routerLink="/register" *ngIf="!isLoggedIn" class="auth-link register">Sign Up</a>
+
+      <!-- User Dropdown -->
+      <div class="user-dropdown" *ngIf="isLoggedIn">
+        <button class="user-btn" (click)="toggleDropdown()">
+          <i class="bi" [class.bi-person-circle]="!isDeliveryAgent()" [class.bi-truck]="isDeliveryAgent()"></i>
+          <span>{{getDisplayName()}}</span>
+        </button>
+        <div class="dropdown-menu" [class.show]="showDropdown">
+          <a *ngIf="!isDeliveryAgent()" routerLink="/profile" class="dropdown-item">
+            <i class="bi bi-person"></i> Profile
+          </a>
+          <a *ngIf="isDeliveryAgent()" routerLink="/delivery-agent/profile" class="dropdown-item">
+            <i class="bi bi-person-badge"></i> Agent Profile
+          </a>
+          <a *ngIf="!isDeliveryAgent()" routerLink="/orders" class="dropdown-item">
+            <i class="bi bi-bag"></i> Orders
+          </a>
+          <a *ngIf="isDeliveryAgent()" routerLink="/delivery-agent/dashboard" class="dropdown-item">
+            <i class="bi bi-truck"></i> Dashboard
+          </a>
+          <a *ngIf="isAdmin" routerLink="/admin" class="dropdown-item">
+            <i class="bi bi-speedometer2"></i> Admin
+          </a>
+          <div class="dropdown-divider"></div>
+          <button (click)="logout()" class="dropdown-item logout">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

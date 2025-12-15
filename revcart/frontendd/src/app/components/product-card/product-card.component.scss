@@ -1,0 +1,105 @@
+.product-card {
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 30px rgba(150, 167, 141, 0.15) !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: hidden !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8faf6 100%) !important;
+  position: relative !important;
+}
+
+.product-card .card-body {
+  padding: 0.75rem !important;
+}
+
+.product-card::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, #96A78D, #B6CEB4) !important;
+}
+
+.product-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 20px 50px rgba(150, 167, 141, 0.25) !important;
+}
+
+.card-img-top {
+  height: 140px !important;
+  object-fit: cover !important;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  background: linear-gradient(135deg, #D9E9CF, #B6CEB4) !important;
+}
+
+.product-card:hover .card-img-top {
+  transform: scale(1.08) !important;
+}
+
+.card-title {
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  color: #2d3436 !important;
+  margin-top: 4px !important;
+  margin-bottom: 2px !important;
+}
+
+.card-text {
+  font-size: 0.75rem !important;
+  line-height: 1.2 !important;
+  color: #636e72 !important;
+  margin-bottom: 2px !important;
+}
+
+.btn {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  transition: all 0.3s ease !important;
+  padding: 0.35rem 0.7rem !important;
+}
+
+.badge {
+  font-size: 0.65rem !important;
+  border-radius: 12px !important;
+  background: linear-gradient(45deg, #96A78D, #7f9276) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+.wishlist-btn {
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  backdrop-filter: blur(10px) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(217, 233, 207, 0.5)) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 2px solid rgba(150, 167, 141, 0.2) !important;
+  box-shadow: 0 4px 15px rgba(150, 167, 141, 0.1) !important;
+  font-size: 0.8rem !important;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.15) rotate(10deg) !important;
+  background: linear-gradient(135deg, #96A78D, #7f9276) !important;
+  color: white !important;
+  box-shadow: 0 8px 25px rgba(150, 167, 141, 0.3) !important;
+}
+
+.wishlist-btn.btn-danger {
+  background: linear-gradient(135deg, #96A78D, #7f9276) !important;
+  color: white !important;
+  border-color: #96A78D !important;
+}
+
+.wishlist-btn.btn-outline-danger {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(217, 233, 207, 0.5)) !important;
+  color: #96A78D !important;
+  border-color: #96A78D !important;
+}

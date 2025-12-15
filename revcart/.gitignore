@@ -1,0 +1,20 @@
+# Root level gitignore
+
+# Test files
+test-*.bat
+test-*.html
+test-*.http
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Environment files
+.env

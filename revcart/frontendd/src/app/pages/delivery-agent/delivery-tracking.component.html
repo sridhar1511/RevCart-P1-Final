@@ -1,0 +1,86 @@
+<div class="delivery-tracking">
+  <div class="container py-4">
+    <h2 class="mb-4">Real-Time Delivery Tracking</h2>
+
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h5>Current Location</h5>
+          </div>
+          <div class="card-body">
+            <div *ngIf="currentLocation" class="location-info">
+              <p><strong>Latitude:</strong> {{ currentLocation.latitude | number:'1.4-4' }}</p>
+              <p><strong>Longitude:</strong> {{ currentLocation.longitude | number:'1.4-4' }}</p>
+              <p><strong>Last Updated:</strong> {{ currentLocation.timestamp | date:'short' }}</p>
+            </div>
+            <div *ngIf="!currentLocation" class="alert alert-info">
+              No location data available. Start tracking to begin.
+            </div>
+
+            <div class="mt-3">
+              <button *ngIf="!isTracking" class="btn btn-success" (click)="startTracking()">
+                Start Tracking
+              </button>
+              <button *ngIf="isTracking" class="btn btn-danger" (click)="stopTracking()">
+                Stop Tracking
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h5>Tracking Status</h5>
+          </div>
+          <div class="card-body">
+            <div class="status-badge">
+              <span *ngIf="isTracking" class="badge bg-success">Active</span>
+              <span *ngIf="!isTracking" class="badge bg-secondary">Inactive</span>
+            </div>
+            <p class="mt-3">
+              <strong>Updates Received:</strong> {{ deliveryUpdates.length }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h5>Location History</h5>
+          </div>
+          <div class="card-body">
+            <div *ngIf="deliveryUpdates.length === 0" class="alert alert-info">
+              No location history yet.
+            </div>
+            <div *ngIf="deliveryUpdates.length > 0" class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let update of deliveryUpdates">
+                    <td>{{ update.latitude | number:'1.4-4' }}</td>
+                    <td>{{ update.longitude | number:'1.4-4' }}</td>
+                    <td>{{ update.status }}</td>
+                    <td>{{ update.timestamp | date:'short' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

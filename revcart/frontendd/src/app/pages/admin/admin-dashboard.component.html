@@ -1,0 +1,143 @@
+<div class="admin-dashboard">
+  <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Admin Dashboard</h1>
+      <button class="btn btn-success" routerLink="/admin/product/new">+ Add Product</button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card bg-primary text-white">
+          <div class="card-body">
+            <h5 class="card-title">Total Orders</h5>
+            <h2>{{ stats.totalOrders }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-success text-white">
+          <div class="card-body">
+            <h5 class="card-title">Total Revenue</h5>
+            <h2>₹{{ stats.totalRevenue }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-warning text-white">
+          <div class="card-body">
+            <h5 class="card-title">Pending Orders</h5>
+            <h2>{{ stats.pendingOrders }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-info text-white">
+          <div class="card-body">
+            <h5 class="card-title">Total Products</h5>
+            <h2>{{ stats.totalProducts }}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="selectedTab === 'orders'" (click)="selectedTab = 'orders'">Orders</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="selectedTab === 'products'" (click)="selectedTab = 'products'">Products</a>
+      </li>
+    </ul>
+
+    <!-- Orders Tab -->
+    <div *ngIf="selectedTab === 'orders'" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h5>Last 10 User Orders</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="isLoading" class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <table *ngIf="!isLoading" class="table table-striped">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>User</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let order of orders">
+                <td>#{{ order.id }}</td>
+                <td>{{ order.user?.name || order.customerName || 'N/A' }}</td>
+                <td>₹{{ order.totalAmount }}</td>
+                <td>
+                  <span class="badge" [ngClass]="'bg-' + getStatusColor(order.status)">
+                    {{ order.status }}
+                  </span>
+                </td>
+                <td>{{ order.orderDate | date: 'short' }}</td>
+                <td>
+                  <select class="form-select form-select-sm" (change)="updateOrderStatus(order.id, $event)">
+                    <option value="">Update Status</option>
+                    <option value="CONFIRMED">Confirmed</option>
+                    <option value="PROCESSING">Processing</option>
+                    <option value="SHIPPED">Shipped</option>
+                    <option value="DELIVERED">Delivered</option>
+                    <option value="CANCELLED">Cancelled</option>
+                    <option value="PENDING">Pending</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Tab -->
+    <div *ngIf="selectedTab === 'products'" class="tab-content">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5>Products</h5>
+          <button class="btn btn-sm btn-success" routerLink="/admin/product/new">+ Add Product</button>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of products">
+                <td>#{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.category }}</td>
+                <td>₹{{ product.price }}</td>
+                <td>{{ product.stockQuantity }}</td>
+                <td>
+                  <button class="btn btn-sm btn-primary me-2" [routerLink]="['/admin/product', product.id]">Edit</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteProduct(product.id)">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,365 @@
+$primary: #A1BC98;
+$secondary: #778873;
+$accent: #D2DCB6;
+$text: #778873;
+$border: #D2DCB6;
+$bg-light: #F1F3E0;
+
+.modern-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 1rem 0;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* Logo Section */
+.logo-section {
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $primary;
+  transition: all 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: -0.5px;
+
+  i {
+    font-size: 1.75rem;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    color: $secondary;
+  }
+}
+
+/* Navigation Menu */
+.nav-menu {
+  display: flex;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 24px;
+  text-decoration: none;
+  color: $text;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  &:hover {
+    background: rgba($primary, 0.08);
+    color: $primary;
+    transform: translateY(-1px);
+  }
+
+  &.active {
+    background: rgba($primary, 0.12);
+    color: $primary;
+    font-weight: 600;
+  }
+
+  i {
+    font-size: 1rem;
+  }
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  max-width: 400px;
+  padding: 0.75rem 1.25rem;
+  background: rgba($primary, 0.05);
+  border: 1.5px solid $border;
+  border-radius: 28px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba($primary, 0.3);
+    background: rgba($primary, 0.08);
+  }
+
+  &:focus-within {
+    border-color: $primary;
+    background: white;
+    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+  }
+}
+
+.search-icon-left,
+.search-icon-right {
+  color: #9ca3af;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.95rem;
+  color: $text;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  &::placeholder {
+    color: #d1d5db;
+  }
+}
+
+/* Right Section */
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba($primary, 0.08);
+  color: $text;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($primary, 0.15);
+    color: $primary;
+    transform: scale(1.1);
+  }
+
+  .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: linear-gradient(135deg, $secondary, $accent);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+  }
+}
+
+/* Auth Links */
+.auth-link {
+  padding: 0.75rem 1.25rem;
+  border-radius: 24px;
+  text-decoration: none;
+  color: $text;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  &:hover {
+    background: rgba($primary, 0.08);
+    color: $primary;
+  }
+
+  &.register {
+    background: linear-gradient(135deg, $primary, $secondary);
+    color: white;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba($primary, 0.3);
+    }
+  }
+}
+
+/* User Dropdown */
+.user-dropdown {
+  position: relative;
+}
+
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: rgba($primary, 0.08);
+  border-radius: 24px;
+  color: $text;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  i {
+    font-size: 1.25rem;
+  }
+
+  &:hover {
+    background: rgba($primary, 0.15);
+    color: $primary;
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.75rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border: 1px solid $border;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1001;
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: transparent;
+  color: $text;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  width: 100%;
+  text-align: left;
+
+  i {
+    font-size: 1rem;
+    color: #9ca3af;
+  }
+
+  &:hover {
+    background: rgba($primary, 0.08);
+    color: $primary;
+    padding-left: 1.5rem;
+
+    i {
+      color: $primary;
+    }
+  }
+
+  &.logout {
+    color: #ef4444;
+
+    i {
+      color: #ef4444;
+    }
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.08);
+      color: #dc2626;
+    }
+  }
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: $border;
+  margin: 0.5rem 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .header-container {
+    gap: 1rem;
+    padding: 0 1.5rem;
+  }
+
+  .search-bar {
+    max-width: 300px;
+  }
+
+  .nav-menu {
+    gap: 0.25rem;
+  }
+
+  .nav-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .search-bar {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .nav-menu {
+    order: 2;
+    flex-basis: 100%;
+    justify-content: center;
+  }
+
+  .right-section {
+    order: 4;
+    flex-basis: 100%;
+    justify-content: center;
+  }
+}

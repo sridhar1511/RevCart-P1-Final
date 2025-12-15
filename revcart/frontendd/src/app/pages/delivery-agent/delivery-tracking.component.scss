@@ -1,0 +1,35 @@
+.delivery-tracking {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+
+  .card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+  }
+
+  .location-info {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid #A1BC98;
+  }
+
+  .status-badge {
+    font-size: 1.2rem;
+  }
+
+  .btn-success {
+    background-color: #A1BC98;
+    border-color: #A1BC98;
+
+    &:hover {
+      background-color: #8fa87f;
+      border-color: #8fa87f;
+    }
+  }
+
+  .table-responsive {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+}

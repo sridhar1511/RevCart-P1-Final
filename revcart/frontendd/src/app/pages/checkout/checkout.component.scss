@@ -1,0 +1,52 @@
+.address-option {
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid #e9ecef;
+}
+
+.address-option:hover {
+  border-color: #007bff;
+  box-shadow: 0 2px 4px rgba(0,123,255,0.1);
+}
+
+.address-option.selected {
+  border-color: #007bff;
+  background-color: #f8f9ff;
+}
+
+.saved-addresses .form-check-input {
+  pointer-events: none;
+}
+
+.order-summary {
+  position: sticky;
+  top: 20px;
+}
+
+.payment-option {
+  padding: 15px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+}
+
+.payment-option:hover {
+  background-color: #f8f9fa;
+}
+
+.order-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.total-row {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+}

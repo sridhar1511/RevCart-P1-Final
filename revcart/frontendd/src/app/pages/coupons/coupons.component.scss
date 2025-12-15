@@ -1,0 +1,29 @@
+.coupon-card {
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+  &:hover:not(.expired) {
+    border-color: #28a745;
+    box-shadow: 0 8px 16px rgba(40, 167, 69, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &.expired {
+    opacity: 0.6;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  }
+}
+
+.coupon-code-section {
+  .coupon-code {
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+  }
+}
+
+.coupon-details {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 1rem;
+}

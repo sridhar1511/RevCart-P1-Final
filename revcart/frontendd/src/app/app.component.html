@@ -1,0 +1,12 @@
+<div class="app-container">
+  <app-welcome-loader 
+    *ngIf="showWelcomeLoader" 
+    (loadingComplete)="onLoadingComplete()">
+  </app-welcome-loader>
+  
+  <app-header></app-header>
+  <main class="container-fluid p-0">
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer></app-footer>
+</div>

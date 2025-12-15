@@ -1,0 +1,13 @@
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+COPY revcart/backend/pom.xml .
+COPY revcart/backend/src ./src
+
+RUN apk add --no-cache maven
+RUN mvn clean package -DskipTests
+
+EXPOSE 8081
+
+CMD ["java", "-jar", "target/revcart-backend-1.0.0.jar"]

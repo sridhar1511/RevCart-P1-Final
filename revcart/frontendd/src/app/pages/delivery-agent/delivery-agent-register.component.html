@@ -1,0 +1,48 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body p-5">
+          <h2 class="text-center mb-4">Delivery Agent Registration</h2>
+
+          <form (ngSubmit)="register()">
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-control" [(ngModel)]="name" name="name" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="email" name="email" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" [(ngModel)]="phone" name="phone" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <div class="input-group">
+                <input [type]="showPassword ? 'text' : 'password'" class="form-control" 
+                       [(ngModel)]="password" name="password" required>
+                <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()">
+                  <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100" [disabled]="isLoading">
+              <span *ngIf="!isLoading">Register</span>
+              <span *ngIf="isLoading"><i class="bi bi-hourglass-split me-2"></i>Registering...</span>
+            </button>
+          </form>
+
+          <div class="text-center mt-3">
+            <p>Already have an account? <a routerLink="/delivery-agent/login">Login here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

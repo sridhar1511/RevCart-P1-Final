@@ -1,0 +1,200 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow register-card">
+        <div class="card-body p-4">
+          <!-- Registration Form -->
+          <div *ngIf="!showOtpVerification">
+            <div class="text-center mb-4">
+              <h3>Create Account</h3>
+              <p class="text-muted">Join RevCart and start shopping today</p>
+            </div>
+            
+            <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">First Name</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="registerData.firstName" 
+                    name="firstName"
+                    required
+                    #firstName="ngModel"
+                    [class.is-invalid]="firstName.invalid && firstName.touched">
+                  <div *ngIf="firstName.invalid && firstName.touched" class="invalid-feedback">
+                    First name is required
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Last Name</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="registerData.lastName" 
+                    name="lastName"
+                    required
+                    #lastName="ngModel"
+                    [class.is-invalid]="lastName.invalid && lastName.touched">
+                  <div *ngIf="lastName.invalid && lastName.touched" class="invalid-feedback">
+                    Last name is required
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  [(ngModel)]="registerData.email" 
+                  name="email"
+                  required
+                  email
+                  #email="ngModel"
+                  [class.is-invalid]="email.invalid && email.touched">
+                <div *ngIf="email.invalid && email.touched" class="invalid-feedback">
+                  <span *ngIf="email.errors?.['required']">Email is required</span>
+                  <span *ngIf="email.errors?.['email']">Please enter a valid email</span>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  [(ngModel)]="registerData.phone" 
+                  name="phone"
+                  required
+                  pattern="[0-9]{10}"
+                  #phone="ngModel"
+                  [class.is-invalid]="phone.invalid && phone.touched">
+                <div *ngIf="phone.invalid && phone.touched" class="invalid-feedback">
+                  <span *ngIf="phone.errors?.['required']">Phone number is required</span>
+                  <span *ngIf="phone.errors?.['pattern']">Please enter a valid 10-digit phone number</span>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                  <input 
+                    [type]="showPassword ? 'text' : 'password'" 
+                    class="form-control" 
+                    [(ngModel)]="registerData.password" 
+                    name="password"
+                    required
+                    minlength="6"
+                    #password="ngModel"
+                    [class.is-invalid]="password.invalid && password.touched">
+                  <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()">
+                    <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+                  </button>
+                </div>
+                <div *ngIf="password.invalid && password.touched" class="invalid-feedback">
+                  <span *ngIf="password.errors?.['required']">Password is required</span>
+                  <span *ngIf="password.errors?.['minlength']">Password must be at least 6 characters</span>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <div class="input-group">
+                  <input 
+                    [type]="showConfirmPassword ? 'text' : 'password'" 
+                    class="form-control" 
+                    [(ngModel)]="confirmPassword" 
+                    name="confirmPassword"
+                    required
+                    #confirmPass="ngModel"
+                    [class.is-invalid]="(confirmPass.invalid && confirmPass.touched) || (confirmPassword !== registerData.password && confirmPass.touched && confirmPassword.length > 0)">
+                  <button class="btn btn-outline-secondary" type="button" (click)="toggleConfirmPassword()">
+                    <i class="bi" [class.bi-eye]="!showConfirmPassword" [class.bi-eye-slash]="showConfirmPassword"></i>
+                  </button>
+                </div>
+                <div *ngIf="(confirmPass.invalid && confirmPass.touched) || (confirmPassword !== registerData.password && confirmPass.touched && confirmPassword.length > 0)" class="invalid-feedback">
+                  <span *ngIf="confirmPass.errors?.['required']">Please confirm your password</span>
+                  <span *ngIf="confirmPassword !== registerData.password && confirmPass.touched && confirmPassword.length > 0">Passwords do not match</span>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Address</label>
+                <textarea 
+                  class="form-control" 
+                  [(ngModel)]="registerData.address" 
+                  name="address"
+                  rows="3"
+                  required
+                  #address="ngModel"
+                  [class.is-invalid]="address.invalid && address.touched"></textarea>
+                <div *ngIf="address.invalid && address.touched" class="invalid-feedback">
+                  Address is required
+                </div>
+              </div>
+              
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" [(ngModel)]="agreeTerms" name="agreeTerms" required>
+                <label class="form-check-label">
+                  I agree to the <a href="#" class="text-success">Terms and Conditions</a>
+                </label>
+              </div>
+              
+              <div class="d-grid">
+                <button type="submit" class="btn btn-success" [disabled]="registerForm.invalid || !agreeTerms || isLoading">
+                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                  {{isLoading ? 'Creating Account...' : 'Create Account'}}
+                </button>
+              </div>
+            </form>
+            
+            <div class="text-center mt-3">
+              <p>Already have an account? <a routerLink="/login" class="text-success">Login here</a></p>
+            </div>
+          </div>
+
+          <!-- OTP Verification Form -->
+          <div *ngIf="showOtpVerification">
+            <div class="text-center mb-4">
+              <h3>Verify Your Email</h3>
+              <p class="text-muted">Enter the 6-digit OTP sent to {{ registerData.email }}</p>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Enter OTP</label>
+              <input 
+                type="text" 
+                class="form-control form-control-lg text-center" 
+                [(ngModel)]="otp" 
+                placeholder="000000"
+                maxlength="6"
+                pattern="[0-9]{6}">
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button 
+                type="button" 
+                class="btn btn-success btn-lg" 
+                (click)="verifyOtp()"
+                [disabled]="!otp || otp.length !== 6 || otpLoading">
+                <span *ngIf="otpLoading" class="spinner-border spinner-border-sm me-2"></span>
+                {{otpLoading ? 'Verifying...' : 'Verify OTP'}}
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-outline-secondary" 
+                (click)="resendOtp()">
+                Resend OTP
+              </button>
+            </div>
+            
+            <div class="text-center mt-3">
+              <p class="text-muted small">Didn't receive OTP? Check your spam folder or click Resend OTP</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

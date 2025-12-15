@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+    
+    triggers {
+        pollSCM('H/10 * * * *')
+    }
+    
+    environment {
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/sridhar1511/RevCart_P1.git'
+            }
+        }
+        
+        stage('Stop Existing Containers') {
+            steps {
+                script {
+                    bat 'docker-compose down || echo "No containers to stop"'
+                }
+            }
+        }
+        
+        stage('Build Images') {
+            steps {
+                script {
+                    bat 'docker-compose build'
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                script {
+                    bat 'docker-compose up -d'
+                }
+            }
+        }
+        
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    bat 'docker ps'
+                    sleep 30
+                    bat 'curl -f http://localhost:4200 || echo "Frontend not ready yet"'
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Pipeline failed - check logs'
+            bat 'docker ps -a'
+            bat 'docker logs revcart-backend || echo "No backend logs"'
+        }
+    }
+}

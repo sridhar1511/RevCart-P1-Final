@@ -1,0 +1,261 @@
+<div class="container my-4">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card profile-sidebar">
+        <div class="card-body text-center">
+          <div class="profile-avatar">
+            <img [src]="profilePicturePreview || 'assets/avatar.jpg'" class="rounded-circle mb-3" width="100" height="100" alt="Profile">
+            <div class="mt-2">
+              <label class="btn btn-sm btn-primary">
+                <i class="bi bi-camera me-1"></i>Change Photo
+                <input type="file" accept="image/*" (change)="onProfilePictureSelected($event)" hidden>
+              </label>
+            </div>
+          </div>
+          <h5>{{user.firstName}} {{user.lastName}}</h5>
+          <p class="text-muted">{{user.email}}</p>
+        </div>
+      </div>
+      
+      <div class="list-group mt-3 profile-nav">
+        <button class="list-group-item list-group-item-action" 
+                [class.active]="activeTab === 'profile'" 
+                (click)="activeTab = 'profile'">
+          <i class="bi bi-person me-2"></i>Profile Information
+        </button>
+        <button class="list-group-item list-group-item-action" 
+                [class.active]="activeTab === 'addresses'" 
+                (click)="activeTab = 'addresses'">
+          <i class="bi bi-geo-alt me-2"></i>Addresses
+        </button>
+        <button class="list-group-item list-group-item-action" 
+                [class.active]="activeTab === 'orders'" 
+                (click)="activeTab = 'orders'">
+          <i class="bi bi-bag me-2"></i>Order History
+        </button>
+        <button class="list-group-item list-group-item-action" 
+                [class.active]="activeTab === 'settings'" 
+                (click)="activeTab = 'settings'">
+          <i class="bi bi-gear me-2"></i>Settings
+        </button>
+      </div>
+    </div>
+    
+    <div class="col-md-9">
+      <!-- Profile Information Tab -->
+      <div *ngIf="activeTab === 'profile'" class="card profile-content">
+        <div class="card-header">
+          <h5 class="mb-0">Profile Information</h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="updateProfile()">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" [(ngModel)]="user.firstName" name="firstName" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" [(ngModel)]="user.lastName" name="lastName" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="user.email" name="email" disabled>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" [(ngModel)]="user.phone" name="phone" required>
+            </div>
+            <button type="submit" class="btn btn-success" [disabled]="isUpdating">
+              <span *ngIf="!isUpdating">Update Profile</span>
+              <span *ngIf="isUpdating"><i class="bi bi-hourglass-split me-2"></i>Updating...</span>
+            </button>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Addresses Tab -->
+      <div *ngIf="activeTab === 'addresses'" class="card profile-content">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Saved Addresses</h5>
+          <button class="btn btn-success btn-sm" (click)="addNewAddress()">
+            <i class="bi bi-plus"></i> Add New Address
+          </button>
+        </div>
+        <div class="card-body">
+          <!-- Address Form -->
+          <div *ngIf="showAddressForm" class="address-form border rounded p-3 mb-4 bg-light">
+            <h6>{{editingAddress ? 'Edit' : 'Add New'}} Address</h6>
+            <form (ngSubmit)="saveAddress()">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" [(ngModel)]="addressForm.fullName" name="fullName" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Phone</label>
+                  <input type="tel" class="form-control" [(ngModel)]="addressForm.phone" name="phone" required>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Address Line 1</label>
+                <input type="text" class="form-control" [(ngModel)]="addressForm.line1" name="line1" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Address Line 2 (Optional)</label>
+                <input type="text" class="form-control" [(ngModel)]="addressForm.line2" name="line2">
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">City</label>
+                  <input type="text" class="form-control" [(ngModel)]="addressForm.city" name="city" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">State</label>
+                  <input type="text" class="form-control" [(ngModel)]="addressForm.state" name="state" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">PIN Code</label>
+                  <input type="text" class="form-control" [(ngModel)]="addressForm.pincode" name="pincode" required>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">{{editingAddress ? 'Update' : 'Save'}} Address</button>
+                <button type="button" class="btn btn-secondary" (click)="cancelAddressForm()">Cancel</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Address List -->
+          <div *ngIf="addresses.length === 0 && !showAddressForm" class="text-center py-4">
+            <i class="bi bi-geo-alt text-muted" style="font-size: 3rem;"></i>
+            <h6 class="text-muted mt-2">No addresses saved</h6>
+            <p class="text-muted">Add your first address to get started</p>
+          </div>
+          
+          <div *ngFor="let address of addresses" class="address-item border rounded p-3 mb-3">
+            <div class="d-flex justify-content-between">
+              <div class="address-details">
+                <h6 class="address-type">
+                  <i class="bi bi-geo-alt me-2"></i>
+                  {{address.fullName}}
+                  <span *ngIf="address.isDefault" class="badge bg-primary ms-2">Default</span>
+                </h6>
+                <p class="mb-1">{{address.line1}}<span *ngIf="address.line2">, {{address.line2}}</span></p>
+                <p class="mb-1">{{address.city}}, {{address.state}} - {{address.pincode}}</p>
+                <p class="text-muted mb-0">
+                  <i class="bi bi-telephone me-1"></i>{{address.phone}}
+                </p>
+              </div>
+              <div class="address-actions">
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="editAddress(address)">
+                  <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteAddress(address)">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Order History Tab -->
+      <div *ngIf="activeTab === 'orders'" class="card profile-content">
+        <div class="card-header">
+          <h5 class="mb-0">Order History</h5>
+        </div>
+        <div class="card-body">
+          <div *ngFor="let order of orders" class="order-item border rounded p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="order-details">
+                <h6 class="order-id">Order #{{order.id}}</h6>
+                <p class="text-muted mb-1">
+                  <i class="bi bi-calendar me-1"></i>{{order.date}}
+                </p>
+                <p class="mb-1">{{order.items}} items • ₹{{order.total}}</p>
+                <span class="badge" [class]="'bg-' + getStatusColor(order.status)">{{order.status}}</span>
+              </div>
+              <div class="order-actions">
+                <button class="btn btn-sm btn-outline-success" (click)="viewOrderDetails(order.id)">
+                  <i class="bi bi-eye"></i> View Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Settings Tab -->
+      <div *ngIf="activeTab === 'settings'" class="card profile-content">
+        <div class="card-header">
+          <h5 class="mb-0">Account Settings</h5>
+        </div>
+        <div class="card-body">
+          <div class="settings-section mb-4">
+            <h6>Notifications</h6>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="settings.emailNotifications" id="emailNotif">
+              <label class="form-check-label" for="emailNotif">
+                <i class="bi bi-envelope me-2"></i>Email notifications
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="settings.smsNotifications" id="smsNotif">
+              <label class="form-check-label" for="smsNotif">
+                <i class="bi bi-phone me-2"></i>SMS notifications
+              </label>
+            </div>
+          </div>
+          
+          <div class="settings-section mb-4">
+            <h6>Privacy</h6>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="settings.shareData" id="shareData">
+              <label class="form-check-label" for="shareData">
+                <i class="bi bi-share me-2"></i>Share data for better recommendations
+              </label>
+            </div>
+          </div>
+          
+          <button class="btn btn-success">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Details Modal -->
+<div *ngIf="showOrderModal" class="modal d-block" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Order Details #{{selectedOrder?.id}}</h5>
+        <button type="button" class="btn-close" (click)="closeOrderModal()"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedOrder">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Order Date:</strong> {{selectedOrder.date}}
+          </div>
+          <div class="col-md-6">
+            <strong>Status:</strong> 
+            <span class="badge" [class]="'bg-' + getStatusColor(selectedOrder.status)">{{selectedOrder.status}}</span>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <strong>Items:</strong> {{selectedOrder.items}} items
+          </div>
+          <div class="col-md-6">
+            <strong>Total:</strong> ₹{{selectedOrder.total}}
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeOrderModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

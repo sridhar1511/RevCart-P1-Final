@@ -1,0 +1,85 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: revcart-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: revcart_db
+      MYSQL_USER: revcart_user
+      MYSQL_PASSWORD: revcart_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./revcart/backend/src/main/resources/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+    restart: unless-stopped
+    networks:
+      - revcart-network
+
+  mongodb:
+    image: mongo:6.0
+    container_name: revcart-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+    networks:
+      - revcart-network
+
+  backend:
+    build:
+      context: ./revcart/backend
+      dockerfile: Dockerfile
+    container_name: revcart-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/revcart_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_DATA_MONGODB_URI: mongodb://admin:admin@mongodb:27017/revcart?authSource=admin
+      JAVA_OPTS: "-Xmx1g -Xms512m"
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - revcart-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/api/products"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  frontend:
+    build:
+      context: ./revcart/frontendd
+      dockerfile: Dockerfile
+    container_name: revcart-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - revcart-network
+
+volumes:
+  mysql_data:
+  mongodb_data:
+
+networks:
+  revcart-network:
+    driver: bridge
