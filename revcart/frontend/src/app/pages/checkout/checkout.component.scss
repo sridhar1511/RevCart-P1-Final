@@ -50,3 +50,37 @@
   border-radius: 8px;
   margin-top: 10px;
 }
+
+.coupon-card {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+.coupon-card:hover {
+  border-color: #007bff;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.coupon-code {
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.available-coupons {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: #f8f9fa;
+}
+
+.coupon-section h6 {
+  color: #495057;
+  font-weight: 600;
+}

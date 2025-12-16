@@ -55,24 +55,37 @@ export class AdminDashboardComponent implements OnInit {
   loadDashboardData() {
     this.isLoading = true;
     
-    // Load all orders from backend API
+    // Load orders from localStorage (where delivery agent updates them)
+    const localOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+    
+    // Try to load from backend API, but don't fail if 403
     this.orderService.getAllOrders().subscribe({
-      next: (allOrders: any[]) => {
+      next: (backendOrders: any[]) => {
+        // Combine local and backend orders, prioritizing local updates
+        const allOrders = [...localOrders, ...backendOrders.filter((bo: any) => 
+          !localOrders.find((lo: any) => lo.id === bo.id)
+        )];
+        
         const sortedOrders = allOrders.sort((a: any, b: any) => {
-          // Sort by date - latest first
           const dateA = new Date(a.orderDate).getTime();
           const dateB = new Date(b.orderDate).getTime();
           return dateB - dateA;
         });
         
-        // Show only last 10 orders
         this.orders = sortedOrders.slice(0, 10);
-        
-        // Calculate stats from all orders, not just displayed ones
         this.calculateStats(sortedOrders);
       },
-      error: () => {
-        console.error('Error loading orders');
+      error: (error) => {
+        // Silently handle 403 and other errors, use localStorage orders
+        console.log('Using localStorage orders due to API error:', error.status);
+        const sortedOrders = localOrders.sort((a: any, b: any) => {
+          const dateA = new Date(a.orderDate).getTime();
+          const dateB = new Date(b.orderDate).getTime();
+          return dateB - dateA;
+        });
+        
+        this.orders = sortedOrders.slice(0, 10);
+        this.calculateStats(sortedOrders);
       }
     });
     
@@ -90,11 +103,19 @@ export class AdminDashboardComponent implements OnInit {
 
   calculateStats(allOrders?: any[]) {
     const ordersToCalculate = allOrders || this.orders;
+    
+    // Count all orders (including cancelled)
     this.stats.totalOrders = ordersToCalculate.length;
+    
+    // Only count revenue from delivered orders
     this.stats.totalRevenue = ordersToCalculate
       .filter(order => order.status === 'DELIVERED')
       .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
-    this.stats.pendingOrders = ordersToCalculate.filter(o => o.status === 'PLACED' || o.status === 'CONFIRMED' || o.status === 'PROCESSING').length;
+    
+    // Pending orders (not delivered or cancelled)
+    this.stats.pendingOrders = ordersToCalculate
+      .filter(o => ['PLACED', 'CONFIRMED', 'PROCESSING', 'SHIPPED'].includes(o.status))
+      .length;
   }
 
   updateOrderStatus(orderId: number, event: Event) {

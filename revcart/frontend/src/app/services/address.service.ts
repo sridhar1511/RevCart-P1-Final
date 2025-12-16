@@ -24,11 +24,16 @@ export class AddressService {
 
   constructor(private authService: AuthService) {
     this.loadAddresses();
+    
+    // Listen for user changes and reload addresses
+    this.authService.currentUser$.subscribe(() => {
+      this.loadAddresses();
+    });
   }
 
   private getStorageKey(): string {
     const user = this.authService.getCurrentUser();
-    const userId = user ? user.id || user.email : 'guest';
+    const userId = user ? (user.id || user.email || user.username) : 'guest';
     return `revcart_addresses_${userId}`;
   }
 

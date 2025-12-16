@@ -152,7 +152,9 @@ export class DeliveryAgentDashboardComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('deliveryAgent');
-    this.router.navigate(['/delivery-agent/login']);
+    this.router.navigate(['/home']).then(() => {
+      window.location.reload();
+    });
   }
 
   getStatusColor(status: string): string {

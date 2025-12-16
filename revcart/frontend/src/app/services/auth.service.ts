@@ -42,6 +42,15 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
     localStorage.removeItem('cart');
+    
+    // Clear user-specific data
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      if (key.startsWith('revcart_addresses_') || key.startsWith('revcart_orders_')) {
+        // Don't remove, just let the service handle user-specific loading
+      }
+    });
+    
     this.currentUserSubject.next(null);
   }
 

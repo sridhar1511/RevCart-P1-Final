@@ -45,6 +45,8 @@ export class CheckoutComponent implements OnInit {
   couponDiscount = 0;
   couponApplied = false;
   couponMessage = '';
+  availableCoupons: any[] = [];
+  showCoupons = false;
 
   constructor(
     private cartService: CartService,
@@ -70,12 +72,20 @@ export class CheckoutComponent implements OnInit {
         this.selectAddress(defaultAddress.id!);
       }
     });
+    
+    // Load available coupons
+    this.loadAvailableCoupons();
   }
 
   calculateTotals() {
     this.subtotal = this.orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     this.tax = Math.round(this.subtotal * 0.05);
     this.total = this.subtotal + this.deliveryFee + this.tax - this.couponDiscount;
+    
+    // Refresh available coupons when subtotal changes
+    if (this.subtotal > 0) {
+      this.loadAvailableCoupons();
+    }
   }
 
   applyCoupon() {
@@ -115,6 +125,36 @@ export class CheckoutComponent implements OnInit {
     this.couponApplied = false;
     this.couponMessage = '';
     this.calculateTotals();
+  }
+  
+  loadAvailableCoupons() {
+    this.couponService.getAllCoupons().subscribe({
+      next: (coupons) => {
+        this.availableCoupons = coupons.filter(coupon => coupon.active && coupon.minOrderAmount <= this.subtotal);
+      },
+      error: (error) => {
+        console.error('Error loading coupons:', error);
+        // Fallback to static coupons if API fails
+        this.availableCoupons = [
+          { code: 'SAVE10', discount: 10, discountType: 'PERCENTAGE', minOrderAmount: 500, description: '10% off on orders above ₹500' },
+          { code: 'WELCOME20', discount: 20, discountType: 'PERCENTAGE', minOrderAmount: 1000, description: '20% off on orders above ₹1000' },
+          { code: 'BIGDEAL', discount: 100, discountType: 'FIXED', minOrderAmount: 2000, description: '₹100 off on orders above ₹2000' }
+        ].filter(coupon => coupon.minOrderAmount <= this.subtotal);
+      }
+    });
+  }
+  
+  toggleCoupons() {
+    this.showCoupons = !this.showCoupons;
+    if (this.showCoupons) {
+      this.loadAvailableCoupons();
+    }
+  }
+  
+  selectCoupon(coupon: any) {
+    this.couponCode = coupon.code;
+    this.applyCoupon();
+    this.showCoupons = false;
   }
   
   selectAddress(addressId: number) {

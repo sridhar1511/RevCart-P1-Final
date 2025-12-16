@@ -32,18 +32,19 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
-      const deliveryAgent = localStorage.getItem('deliveryAgent');
-      if (deliveryAgent && !user) {
-        this.currentUser = JSON.parse(deliveryAgent);
-      }
-      this.isLoggedIn = !!user || !!deliveryAgent;
+      this.isLoggedIn = !!user;
       this.isAdmin = user ? this.authService.isAdmin() : false;
+      
+      // If no regular user, check for delivery agent
+      if (!user) {
+        this.checkDeliveryAgent();
+      }
     });
     
-    // Also check for delivery agent on page load
+    // Initial check
     this.checkDeliveryAgent();
     
-    // Listen for storage changes (delivery agent login/logout)
+    // Listen for storage changes
     window.addEventListener('storage', () => {
       this.checkDeliveryAgent();
     });
@@ -56,14 +57,18 @@ export class HeaderComponent implements OnInit {
     if (deliveryAgent && !currentUser) {
       this.currentUser = JSON.parse(deliveryAgent);
       this.isLoggedIn = true;
+      this.isAdmin = false;
     } else if (!deliveryAgent && !currentUser) {
       this.currentUser = null;
       this.isLoggedIn = false;
+      this.isAdmin = false;
     } else if (currentUser) {
       this.currentUser = currentUser;
       this.isLoggedIn = true;
+      this.isAdmin = this.authService.isAdmin();
     }
 
+    // Update cart and wishlist counts
     this.cartService.cartItems$.subscribe(items => {
       this.cartCount = items.reduce((count, item) => count + item.quantity, 0);
     });
@@ -92,10 +97,24 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.authService.logout();
     localStorage.removeItem('deliveryAgent');
+    
+    // Force immediate state reset
     this.isAdmin = false;
     this.showDropdown = false;
     this.currentUser = null;
     this.isLoggedIn = false;
+    
+    // Force component refresh
+    this.checkDeliveryAgent();
+    
+    // Trigger storage event
+    window.dispatchEvent(new Event('storage'));
+    
+    // Force change detection
+    setTimeout(() => {
+      this.checkDeliveryAgent();
+    }, 0);
+    
     this.router.navigate(['/home']);
   }
 }
