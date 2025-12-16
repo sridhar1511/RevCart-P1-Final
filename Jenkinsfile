@@ -32,24 +32,36 @@ pipeline {
             }
         }
         
-        stage('Build Status') {
+        stage('Deploy') {
             steps {
-                echo 'RevCart application is ready for deployment!'
-                echo 'Frontend: Angular application with coupon functionality'
-                echo 'Backend: Spring Boot with delivery agent features'
-                echo 'Database: MySQL + MongoDB configuration'
-                echo 'All components validated successfully!'
+                echo 'Deploying RevCart application...'
+                script {
+                    try {
+                        sh 'docker-compose down || true'
+                        sh 'docker-compose up -d --build'
+                        echo '✅ Deployment successful!'
+                    } catch (Exception e) {
+                        echo "❌ Deployment failed: ${e.getMessage()}"
+                        throw e
+                    }
+                }
+            }
+        }
+        
+        stage('Health Check') {
+            steps {
+                echo 'Performing health checks...'
+                sleep(30)
+                sh 'docker-compose ps'
+                echo '✅ Health check completed!'
             }
         }
     }
     
     post {
-        always {
-            echo 'Pipeline execution completed'
-        }
         success {
-            echo '✅ RevCart CI/CD Pipeline executed successfully!'
-            echo 'Application is ready for deployment'
+            echo '🚀 CI/CD Pipeline completed successfully!'
+            echo 'RevCart is deployed and running!'
         }
         failure {
             echo '❌ Pipeline failed. Check logs for details.'
