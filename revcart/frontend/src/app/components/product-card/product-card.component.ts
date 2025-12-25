@@ -16,4 +16,8 @@ export class ProductCardComponent {
   onAddToCart() {
     this.addToCart.emit(this.product);
   }
+
+  onImageError(event: any) {
+    event.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
+  }
 }
